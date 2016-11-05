@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 
     @Override
     public int getCount() {
-        return 0;
+        return mMoviesDetail.size();
     }
 
     @Override
@@ -40,6 +39,7 @@ import java.util.ArrayList;
 
 
     public void add(ArrayList<Movie> movie){
+        mMoviesDetail.clear();
         for (Movie m:movie ) {
             mMoviesDetail.add(m);
         }
@@ -54,9 +54,9 @@ import java.util.ArrayList;
 
             view = layoutInflater.inflate(R.layout.item_list_movie, null);
         }
-        TextView Moviename = (TextView) view.findViewById(R.id.movie_name);
+       // TextView Moviename = (TextView) view.findViewById(R.id.movie_name);
         ImageView Movieposter = (ImageView) view.findViewById(R.id.movie_poster);
-        Moviename.setText(mMoviesDetail.get(position).getMoviename());
+       // Moviename.setText(mMoviesDetail.get(position).getMoviename());
 
         Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/"+ mMoviesDetail.get(position).getMovieposter()).into(Movieposter);
         return view;

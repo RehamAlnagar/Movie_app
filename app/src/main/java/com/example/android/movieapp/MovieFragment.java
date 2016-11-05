@@ -1,6 +1,7 @@
 package com.example.android.movieapp;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -23,10 +25,12 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
+
 public class MovieFragment extends Fragment {
 
-    private customAdapter mMoviesDetails ;
-    private ArrayList<Movie> ArrayData;
+
+    protected customAdapter mMoviesDetails ;
+    protected ArrayList<Movie> ArrayData= new ArrayList<Movie>();
 
     public MovieFragment(){
 
@@ -44,7 +48,7 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mMoviesDetails =
-                new customAdapter (getContext(),ArrayData);
+                new customAdapter (getContext(), new ArrayList<Movie> ());
 
          View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
@@ -52,10 +56,30 @@ public class MovieFragment extends Fragment {
          GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
-        fetchMovie MovieView = new fetchMovie( mMoviesDetails);
+        fetchMovie MovieView = new fetchMovie( mMoviesDetails){
+
+        };
         MovieView.execute("top_rated");
 
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        Object moviedetail = mMoviesDetails.getItem(position);
+                        Intent intent = new Intent(getActivity(), DetailActivity.class)
+                              .putExtra(Intent.EXTRA_TEXT, moviedetail);
+                        startActivity(intent);
+                    }
+                });
+        /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String forecast = mForecastAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+            }
+        });*/
 
         return rootView;
 
@@ -66,14 +90,12 @@ public class MovieFragment extends Fragment {
     {
         private final String LOG_TAG = fetchMovie.class.getSimpleName();
 
-        private ArrayList<Movie> movieArrayList = new ArrayList<Movie>();
 
-        private customAdapter mMovieAdapter;
 
 
         public fetchMovie( customAdapter ada){
 
-            mMovieAdapter = ada;
+            mMoviesDetails = ada;
         }
 
 
@@ -126,15 +148,15 @@ public class MovieFragment extends Fragment {
                     Movie movieData = new Movie() ;
                     JSONObject jsonObject = result.getJSONObject(i);
                     String poster = jsonObject.getString("poster_path");
-                    String title = jsonObject.getString("original_title");
-                    movieData.setMoviename(title);
+                   // String title = jsonObject.getString("original_title");
+                    //movieData.setMoviename(title);
                     movieData.setMovieposter(poster);
-                    movieArrayList.add(movieData);
+                    ArrayData.add(movieData);
 
                 }
 
                Log.v(LOG_TAG, "Movie string: " + MovieJsonStr);
-                return movieArrayList;
+                return ArrayData;
 
 
             } catch (IOException e) {
@@ -159,7 +181,7 @@ public class MovieFragment extends Fragment {
             }
 
 
-            return movieArrayList;
+            return ArrayData;
         }
 
 
@@ -170,9 +192,9 @@ public class MovieFragment extends Fragment {
             super.onPostExecute(movies);
 
             if(movies != null){
-                movieArrayList.clear();
-                mMovieAdapter.add(movies);}
-            mMovieAdapter.notifyDataSetChanged();
+              //  mMoviesDetails.clear();
+                mMoviesDetails.add(movies);}
+            mMoviesDetails.notifyDataSetChanged();
 
         }
     }
