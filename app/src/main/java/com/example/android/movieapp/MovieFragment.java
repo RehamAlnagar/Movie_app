@@ -65,15 +65,15 @@ public class MovieFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
 
-                Bundle bundle = new Bundle();
-                bundle.putString("Name", moviedetail.getMoviename());
+               // Bundle bundle = new Bundle();
+                //bundle.putString("Name", moviedetail.getMoviename());
                 //bundle.putString("Poster", moviedetail.getMovieposter());
                // bundle.putString("", "");
                 //bundle.putString("", "");
                 //bundle.putString("", "");
                 //bundle.putString("", "");
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtras(bundle);
+                intent.putExtra(moviedetail.getMoviename(), intent);
                 startActivity(intent);
             }
         });

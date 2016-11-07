@@ -40,9 +40,9 @@ public class DetailActivity extends Activity {
             TextView Title = (TextView) findViewById(R.id.detail_Title);
 
             Intent intent = getActivity().getIntent();
-            Bundle bundle = intent.getExtras();
+           // Bundle bundle = intent.getExtras();
 
-            String MovieName = bundle.getString("Name");
+            String MovieName = intent.getExtras().getString("Name");
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
                 Title.setText(MovieName);
 
