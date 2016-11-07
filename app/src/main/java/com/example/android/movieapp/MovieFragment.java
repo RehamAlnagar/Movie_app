@@ -25,14 +25,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
-
 public class MovieFragment extends Fragment {
 
 
-    protected customAdapter mMoviesDetails ;
-    protected ArrayList<Movie> ArrayData= new ArrayList<Movie>();
+    protected customAdapter mMoviesDetails;
+    protected ArrayList<Movie> ArrayData = new ArrayList<Movie>();
 
-    public MovieFragment(){
+    public MovieFragment() {
 
     }
 
@@ -48,28 +47,36 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mMoviesDetails =
-                new customAdapter (getContext(), new ArrayList<Movie> ());
+                new customAdapter(getContext(), new ArrayList<Movie>());
 
-         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
         // Get a reference to the gridView, and attach this adapter to it.
-         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
-        fetchMovie MovieView = new fetchMovie( mMoviesDetails){
+        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
 
         };
         MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                        Object moviedetail = mMoviesDetails.getItem(position);
-                        Intent intent = new Intent(getActivity(), DetailActivity.class)
-                              .putExtra(Intent.EXTRA_TEXT, moviedetail);
-                        startActivity(intent);
-                    }
-                });
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", moviedetail.getMoviename());
+                //bundle.putString("Poster", moviedetail.getMovieposter());
+               // bundle.putString("", "");
+                //bundle.putString("", "");
+                //bundle.putString("", "");
+                //bundle.putString("", "");
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -86,14 +93,11 @@ public class MovieFragment extends Fragment {
     }
 
 
-    public class fetchMovie extends AsyncTask<String,Void,ArrayList<Movie>>
-    {
+    public class fetchMovie extends AsyncTask<String, Void, ArrayList<Movie>> {
         private final String LOG_TAG = fetchMovie.class.getSimpleName();
 
 
-
-
-        public fetchMovie( customAdapter ada){
+        public fetchMovie(customAdapter ada) {
 
             mMoviesDetails = ada;
         }
@@ -115,7 +119,7 @@ public class MovieFragment extends Fragment {
             final String Movie_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
             try {
-                URL url = new URL(Movie_BASE_URL + params[0]+"?api_key=3d03f6c2413726779fb4dcd3135aa7bb");
+                URL url = new URL(Movie_BASE_URL + params[0] + "?api_key=3d03f6c2413726779fb4dcd3135aa7bb");
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -144,23 +148,23 @@ public class MovieFragment extends Fragment {
                 MovieJsonStr = buffer.toString();
                 JSONObject movieJason = new JSONObject(MovieJsonStr);
                 JSONArray result = movieJason.getJSONArray("results");
-                for (int i=0;i<result.length();i++){
-                    Movie movieData = new Movie() ;
+                for (int i = 0; i < result.length(); i++) {
+                    Movie movieData = new Movie();
                     JSONObject jsonObject = result.getJSONObject(i);
                     String poster = jsonObject.getString("poster_path");
-                   // String title = jsonObject.getString("original_title");
+                    // String title = jsonObject.getString("original_title");
                     //movieData.setMoviename(title);
                     movieData.setMovieposter(poster);
                     ArrayData.add(movieData);
 
                 }
 
-               Log.v(LOG_TAG, "Movie string: " + MovieJsonStr);
+                Log.v(LOG_TAG, "Movie string: " + MovieJsonStr);
                 return ArrayData;
 
 
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error "+ e.toString());
+                Log.e(LOG_TAG, "Error " + e.toString());
                 // If the code didn't successfully get the weather data, there's no point in attemping
 
                 // to parse it.
@@ -185,15 +189,14 @@ public class MovieFragment extends Fragment {
         }
 
 
-
-
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
             super.onPostExecute(movies);
 
-            if(movies != null){
-              //  mMoviesDetails.clear();
-                mMoviesDetails.add(movies);}
+            if (movies != null) {
+                //  mMoviesDetails.clear();
+                mMoviesDetails.add(movies);
+            }
             mMoviesDetails.notifyDataSetChanged();
 
         }
