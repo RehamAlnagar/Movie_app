@@ -37,16 +37,16 @@ public class DetailActivity extends Activity {
                                  Bundle savedInstanceState){
 
             View rootView = inflater.inflate(R.layout.activity_detail, container, false);
-            TextView Title = (TextView) findViewById(R.id.detail_Title);
+            TextView Title = (TextView) rootView.findViewById(R.id.detail_Title);
             // Bundle bundle = intent.getExtras();
             Intent intent = getActivity().getIntent();
 
 
             String MovieName =  getIntent().getStringExtra("Name");
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
+           // if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
                 Title.setText(MovieName);
 
-            }
+            //}
 
 
             return rootView;

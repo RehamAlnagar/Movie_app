@@ -79,7 +79,7 @@ public class MovieFragment extends Fragment {
                 //bundle.putString("", "");
                 //bundle.putString("", "");
                 Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("Name", moviedetail.getMoviename());
                 startActivity(intent);
             }
