@@ -77,16 +77,6 @@ public class MovieFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mForecastAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, forecast);
-                startActivity(intent);
-            }
-        });*/
 
         return rootView;
 
@@ -194,7 +184,6 @@ public class MovieFragment extends Fragment {
             super.onPostExecute(movies);
 
             if (movies != null) {
-                //  mMoviesDetails.clear();
                 mMoviesDetails.add(movies);
             }
             mMoviesDetails.notifyDataSetChanged();
