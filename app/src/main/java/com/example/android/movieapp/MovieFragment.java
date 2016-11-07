@@ -1,6 +1,7 @@
 package com.example.android.movieapp;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -61,19 +62,25 @@ public class MovieFragment extends Fragment {
         MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            private Context applicationContext;
+
+            public Context getApplicationContext() {
+                return applicationContext;
+            }
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
 
-               // Bundle bundle = new Bundle();
+                // Bundle bundle = new Bundle();
                 //bundle.putString("Name", moviedetail.getMoviename());
                 //bundle.putString("Poster", moviedetail.getMovieposter());
-               // bundle.putString("", "");
+                // bundle.putString("", "");
                 //bundle.putString("", "");
                 //bundle.putString("", "");
                 //bundle.putString("", "");
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(moviedetail.getMoviename(), intent);
+                Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtra("Name", moviedetail.getMoviename());
                 startActivity(intent);
             }
         });
