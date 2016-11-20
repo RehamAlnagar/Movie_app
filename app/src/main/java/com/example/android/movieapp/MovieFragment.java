@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,7 +32,10 @@ public class MovieFragment extends Fragment {
 
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> ArrayData = new ArrayList<Movie>();
+    private Context context;
+    fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
 
+    };
     public MovieFragment() {
 
     }
@@ -41,6 +45,26 @@ public class MovieFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        switch (id){
+            case R.id.top_rated :
+                new fetchMovie(mMoviesDetails).execute("top_rated");
+                return true;
+            case R.id.most_popular:
+                new fetchMovie(mMoviesDetails).execute("popular");
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
 
@@ -56,9 +80,6 @@ public class MovieFragment extends Fragment {
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
-        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
-
-        };
         MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,17 +91,17 @@ public class MovieFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                // Bundle bundle = new Bundle();
-                //bundle.putString("Name", moviedetail.getMoviename());
-                //bundle.putString("Poster", moviedetail.getMovieposter());
-                // bundle.putString("", "");
-                //bundle.putString("", "");
-                //bundle.putString("", "");
-                //bundle.putString("", "");
                 Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra("Name", moviedetail.getMoviename());
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", moviedetail.getMoviename());
+                bundle.putString("Poster", moviedetail.getMovieposter());
+                bundle.putString("ReleaseDate", moviedetail.getmReleasedate());
+                bundle.putString("Overview", moviedetail.getmOverview());
+                bundle.putString("voteAverage", moviedetail.getmVoteAverage());
+
+                intent.putExtras(bundle);
+               // intent.putExtra("Name", moviedetail.getMoviename());
                 startActivity(intent);
             }
         });
@@ -93,6 +114,9 @@ public class MovieFragment extends Fragment {
     public class fetchMovie extends AsyncTask<String, Void, ArrayList<Movie>> {
         private final String LOG_TAG = fetchMovie.class.getSimpleName();
 
+
+        public fetchMovie() {
+        }
 
         public fetchMovie(customAdapter ada) {
 
@@ -149,9 +173,16 @@ public class MovieFragment extends Fragment {
                     Movie movieData = new Movie();
                     JSONObject jsonObject = result.getJSONObject(i);
                     String poster = jsonObject.getString("poster_path");
-                    // String title = jsonObject.getString("original_title");
-                    //movieData.setMoviename(title);
+                    String title = jsonObject.getString("original_title");
+                    String releaseDate = jsonObject.getString("release_date");
+                    String overview = jsonObject.getString("overview");
+                    String average = jsonObject.getString("vote_average");
+
+                    movieData.setMoviename(title);
                     movieData.setMovieposter(poster);
+                    movieData.setmReleasedate(releaseDate);
+                    movieData.setmOverview(overview);
+                    movieData.setmVoteAverage(average);
                     ArrayData.add(movieData);
 
                 }
