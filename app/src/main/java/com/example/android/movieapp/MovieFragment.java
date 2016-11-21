@@ -51,7 +51,8 @@ public class MovieFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {};
+
+        fetchMovie MovieView = new fetchMovie(mMoviesDetails) ;
         switch (id){
             case R.id.top_rated :
                 MovieView.execute("top_rated");
@@ -70,11 +71,10 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
-
-        };
         mMoviesDetails =
                 new customAdapter(getContext(), new ArrayList<Movie>());
+        fetchMovie MovieView = new fetchMovie(mMoviesDetails) ;
+
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
