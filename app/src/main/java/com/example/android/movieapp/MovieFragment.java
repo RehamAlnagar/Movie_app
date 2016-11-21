@@ -33,9 +33,7 @@ public class MovieFragment extends Fragment {
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> ArrayData = new ArrayList<Movie>();
     private Context context;
-    fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
 
-    };
     public MovieFragment() {
 
     }
@@ -53,12 +51,13 @@ public class MovieFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
+        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {};
         switch (id){
             case R.id.top_rated :
-                new fetchMovie(mMoviesDetails).execute("top_rated");
+                MovieView.execute("top_rated");
                 return true;
             case R.id.most_popular:
-                new fetchMovie(mMoviesDetails).execute("popular");
+                MovieView.execute("popular");
 
                 return true;
             default:
@@ -71,6 +70,9 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        fetchMovie MovieView = new fetchMovie(mMoviesDetails) {
+
+        };
         mMoviesDetails =
                 new customAdapter(getContext(), new ArrayList<Movie>());
 
