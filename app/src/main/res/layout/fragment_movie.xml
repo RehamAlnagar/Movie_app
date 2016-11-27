@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/frame_fragment">
+    android:id="@+id/frame_main_activity">
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/gridview"
-        android:numColumns="2"
+        android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         ></GridView>
 </FrameLayout>

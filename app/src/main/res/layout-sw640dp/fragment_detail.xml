@@ -39,13 +39,13 @@
                     android:id="@+id/detail_poster"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:orientation="vertical"
                     android:paddingLeft="20dp">
 
@@ -61,7 +61,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:paddingTop="10dp"
-                        android:textSize="22dp" />
+                        android:textSize="22dp"
+
+                        />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -70,14 +72,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/add_favbtn"
-                            android:text="Add to favourite" />
+                            android:text="Add to favourite"
+                            android:onClick="addButtonClicked" />
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/delete_btn"
-                            android:text="delete from favourite" />
+                            android:text="delete from favourite"
+                            android:onClick="deleteButtonClicked" />
                     </LinearLayout>
-
 
                 </LinearLayout>
             </LinearLayout>
@@ -86,53 +89,11 @@
                 android:id="@+id/overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
+                android:paddingBottom="25dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="25dp"
-                android:textSize="17sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#000"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trailers:"
-                android:textSize="15dp"
-                android:textStyle="italic"
-                android:paddingTop="10dp"
-                />
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/trailers_list"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reviews:"
-                android:textSize="15dp"
-                android:textStyle="italic"/>
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/reviews_list"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                />
-
+                android:textSize="22sp" />
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

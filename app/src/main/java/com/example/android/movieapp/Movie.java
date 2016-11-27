@@ -3,6 +3,7 @@ package com.example.android.movieapp;
 
 public class Movie {
 
+    private int mID;
     private String mMoviename;
     private String mMovieposter;
     private String mReleasedate;
@@ -58,4 +59,9 @@ public class Movie {
     public void setmOverview(String mOverview) {
         this.mOverview = mOverview;
     }
+
+    public int getmID() { return mID; }
+
+    public void setmID(int mID) { this.mID = mID; }
+
 }

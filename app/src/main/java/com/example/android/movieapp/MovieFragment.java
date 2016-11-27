@@ -1,8 +1,8 @@
 package com.example.android.movieapp;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,18 +31,26 @@ public class MovieFragment extends Fragment {
 
 
     protected customAdapter mMoviesDetails;
-    protected ArrayList<Movie> ArrayData = new ArrayList<Movie>();
+    protected ArrayList<Movie> arrayData = new ArrayList<Movie>();
     private Context context;
+    private NameListener mListener;
+    public ProgressDialog dialog;
 
-    public MovieFragment() {
-
+    public void setNameListener(NameListener mListener) {
+        this.mListener = mListener;
     }
+
+
+    public MovieFragment() {   }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        setRetainInstance(true);
     }
 
 
@@ -52,13 +60,16 @@ public class MovieFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
-        fetchMovie MovieView = new fetchMovie(mMoviesDetails) ;
+        FetchMainMovie MovieView = new FetchMainMovie(mMoviesDetails) ;
         switch (id){
             case R.id.top_rated :
                 MovieView.execute("top_rated");
                 return true;
             case R.id.most_popular:
                 MovieView.execute("popular");
+                return true;
+            case R.id.favourite:
+
 
                 return true;
             default:
@@ -73,7 +84,7 @@ public class MovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         mMoviesDetails =
                 new customAdapter(getContext(), new ArrayList<Movie>());
-        fetchMovie MovieView = new fetchMovie(mMoviesDetails) ;
+        FetchMainMovie MovieView = new FetchMainMovie(mMoviesDetails) ;
 
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
@@ -94,33 +105,22 @@ public class MovieFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie moviedetail = (Movie) mMoviesDetails.getItem(position);
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("Name", moviedetail.getMoviename());
-                bundle.putString("Poster", moviedetail.getMovieposter());
-                bundle.putString("ReleaseDate", moviedetail.getmReleasedate());
-                bundle.putString("Overview", moviedetail.getmOverview());
-                bundle.putString("voteAverage", moviedetail.getmVoteAverage());
-
-                intent.putExtras(bundle);
-               // intent.putExtra("Name", moviedetail.getMoviename());
-                startActivity(intent);
+                mListener.setSelectedName(moviedetail);
             }
         });
 
         return rootView;
-
     }
 
 
-    public class fetchMovie extends AsyncTask<String, Void, ArrayList<Movie>> {
-        private final String LOG_TAG = fetchMovie.class.getSimpleName();
+    public class FetchMainMovie extends AsyncTask<String, Void, ArrayList<Movie>> {
+        private final String LOG_TAG = FetchMainMovie.class.getSimpleName();
 
 
-        public fetchMovie() {
+        public FetchMainMovie() {
         }
 
-        public fetchMovie(customAdapter ada) {
+        public FetchMainMovie(customAdapter ada) {
 
             mMoviesDetails = ada;
         }
@@ -138,7 +138,6 @@ public class MovieFragment extends Fragment {
 
             String MovieJsonStr = null;
 
-
             final String Movie_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
             try {
@@ -151,46 +150,43 @@ public class MovieFragment extends Fragment {
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
-                    // Nothing to do.
                     return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
                     buffer.append(line + "\n");
                 }
 
                 if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
                     return null;
                 }
                 MovieJsonStr = buffer.toString();
                 JSONObject movieJason = new JSONObject(MovieJsonStr);
                 JSONArray result = movieJason.getJSONArray("results");
+                arrayData.clear();
                 for (int i = 0; i < result.length(); i++) {
                     Movie movieData = new Movie();
                     JSONObject jsonObject = result.getJSONObject(i);
+                    int id = jsonObject.getInt("id");
                     String poster = jsonObject.getString("poster_path");
                     String title = jsonObject.getString("original_title");
                     String releaseDate = jsonObject.getString("release_date");
                     String overview = jsonObject.getString("overview");
                     String average = jsonObject.getString("vote_average");
 
+                    movieData.setmID(id);
                     movieData.setMoviename(title);
                     movieData.setMovieposter(poster);
                     movieData.setmReleasedate(releaseDate);
                     movieData.setmOverview(overview);
                     movieData.setmVoteAverage(average);
-                    ArrayData.add(movieData);
-
+                    arrayData.add(movieData);
                 }
 
                 Log.v(LOG_TAG, "Movie string: " + MovieJsonStr);
-                return ArrayData;
+                return arrayData;
 
 
             } catch (IOException e) {
@@ -215,7 +211,7 @@ public class MovieFragment extends Fragment {
             }
 
 
-            return ArrayData;
+            return arrayData;
         }
 
 

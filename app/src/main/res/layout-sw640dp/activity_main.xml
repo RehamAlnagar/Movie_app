@@ -4,12 +4,19 @@
     android:id="@+id/frame_main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.movieapp.MainActivity"
-    >
+    tools:context="com.example.android.movieapp.MainActivity">
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
         android:layout_height="match_parent"
         android:id="@+id/frame1"/>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_details"/>
+
 
 </LinearLayout>
