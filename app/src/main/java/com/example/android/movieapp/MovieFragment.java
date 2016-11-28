@@ -34,7 +34,7 @@ public class MovieFragment extends Fragment {
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> arrayData = new ArrayList<Movie>();
     private Context context = getContext();
-    private DBHandler dbFavourite = new DBHandler(context);
+    private DBHandler dbFavourite ;//= new DBHandler(context);
     private GridView gridView;
     private NameListener mListener;
     // public ProgressDialog dialog;
@@ -118,6 +118,7 @@ public class MovieFragment extends Fragment {
         gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
+        dbFavourite = new DBHandler(rootView.getContext());
         MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

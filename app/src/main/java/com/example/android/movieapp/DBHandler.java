@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class DBHandler extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION =1;
@@ -20,17 +21,19 @@ public class DBHandler extends SQLiteOpenHelper{
     private static final String COL_RELEASEDATE = "releasedate";
     private static final String COL_VOTEAVG = "voteaverage";
     private static final String COL_OVERVIEW = "overview";
+    private Context mcontext;
 
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mcontext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "Create table " + TABLE_MOVIES + " ( " + COL_ID + " INTEGER PRIMARY KEY, " +
+        String query = "Create table " + TABLE_MOVIES + " (" + COL_ID + " INTEGER PRIMARY KEY, " +
                 COL_MOVIENAME +" TEXT, " + COL_MOVIEPOSTER + " TEXT, " + COL_RELEASEDATE + " TEXT, "+
-                COL_VOTEAVG + " TEXT, " +COL_OVERVIEW + " TEXT " + ");";
+                COL_VOTEAVG + " TEXT, " +COL_OVERVIEW + " TEXT" + ");";
         db.execSQL(query);
     }
 
@@ -53,9 +56,11 @@ public class DBHandler extends SQLiteOpenHelper{
 
         Long result = db.insert(TABLE_MOVIES,null,contentValues);
         if(result == -1){
+            Toast.makeText(mcontext, "Movie is already added to favourite", Toast.LENGTH_SHORT).show();
             return false;
         }
         else {
+            Toast.makeText(mcontext, "Movie added to favourite", Toast.LENGTH_SHORT).show();
             return true;
         }
     }
