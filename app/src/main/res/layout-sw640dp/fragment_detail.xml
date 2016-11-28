@@ -7,11 +7,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -39,13 +41,13 @@
                     android:id="@+id/detail_poster"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:paddingLeft="20dp">
 
@@ -53,7 +55,7 @@
                         android:id="@+id/moviedate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="22dp" />
+                        android:textSize="22sp" />
 
                     <TextView
                         android:id="@+id/movierate"
@@ -61,9 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:paddingTop="10dp"
-                        android:textSize="22dp"
-
-                        />
+                        android:textSize="22sp" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -72,15 +72,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/add_favbtn"
-                            android:text="Add to favourite"
-                            android:onClick="addButtonClicked" />
+                            android:text="Add to favourite" />
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/delete_btn"
-                            android:text="delete from favourite"
-                            android:onClick="deleteButtonClicked" />
+                            android:text="delete from favourite" />
                     </LinearLayout>
+
 
                 </LinearLayout>
             </LinearLayout>
@@ -89,11 +88,61 @@
                 android:id="@+id/overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="25dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="25dp"
-                android:textSize="22sp" />
+                android:textSize="17sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000"/>
+
         </LinearLayout>
+
     </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trailers:"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:paddingTop="10dp"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:id="@+id/trailers_list"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reviews:"
+            android:textSize="15sp"
+            android:textStyle="italic"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:id="@+id/reviews_list"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            />
+    </LinearLayout>
+
 </LinearLayout>

@@ -52,7 +52,6 @@ public class DBHandler extends SQLiteOpenHelper{
         contentValues.put(COL_OVERVIEW,movies.getmOverview());
 
         Long result = db.insert(TABLE_MOVIES,null,contentValues);
-        db.close();
         if(result == -1){
             return false;
         }

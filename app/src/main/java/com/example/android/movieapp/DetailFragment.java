@@ -110,7 +110,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String moviekey = arrayTrailers.get(0);
+                String moviekey = (String) mMoviestrailers.getItem(position);
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(moviekey)));
             }
         });

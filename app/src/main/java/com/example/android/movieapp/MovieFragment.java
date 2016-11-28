@@ -1,8 +1,8 @@
 package com.example.android.movieapp;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +33,11 @@ public class MovieFragment extends Fragment {
 
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> arrayData = new ArrayList<Movie>();
-    private Context context;
+    private Context context = getContext();
+    private DBHandler dbFavourite = new DBHandler(context);
+    private GridView gridView;
     private NameListener mListener;
-    public ProgressDialog dialog;
+    // public ProgressDialog dialog;
 
     public void setNameListener(NameListener mListener) {
         this.mListener = mListener;
@@ -48,7 +51,6 @@ public class MovieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         setRetainInstance(true);
     }
@@ -69,6 +71,31 @@ public class MovieFragment extends Fragment {
                 MovieView.execute("popular");
                 return true;
             case R.id.favourite:
+                Cursor result = dbFavourite.getAllData();
+                ArrayList<Movie> favList = new ArrayList<Movie>();
+                if(result.getCount() == 0){
+                    Toast.makeText(getContext(),"No favourite movies yet!",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    while (result.moveToNext()){
+                        int mID = result.getInt(0);
+                        String movieTitle = result.getString(1);
+                        String moviePoster = result.getString(2);
+                        String releaseDate = result.getString(3);
+                        String voteAvg = result.getString(4);
+                        String overview = result.getString(5);
+                        Movie fMov = new Movie();
+                        fMov.setmID(mID);
+                        fMov.setMoviename(movieTitle);
+                        fMov.setMovieposter(moviePoster);
+                        fMov.setmReleasedate(releaseDate);
+                        fMov.setmVoteAverage(voteAvg);
+                        fMov.setmOverview(overview);
+                        favList.add(fMov);
+                    }
+                    mMoviesDetails.add(favList);
+                    gridView.setAdapter(mMoviesDetails);
+                }
 
 
                 return true;
@@ -88,9 +115,7 @@ public class MovieFragment extends Fragment {
 
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
-
-        // Get a reference to the gridView, and attach this adapter to it.
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+        gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
         MovieView.execute("top_rated");
