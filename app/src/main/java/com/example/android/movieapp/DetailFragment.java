@@ -75,7 +75,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         FetchReviews movieReview = new FetchReviews(mMoviesReviews);
 
         dbHandler = new DBHandler(getContext());
-        if(isNetworkAvailable()) {
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         TextView Title = (TextView) rootView.findViewById(R.id.detail_Title);
         ImageView Poster = (ImageView) rootView.findViewById(R.id.detail_poster);
@@ -116,10 +116,10 @@ public class DetailFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 Integer deletedRow = dbHandler.deleteMovies(String.valueOf(mMovieSelected.getmID()));
                 if(deletedRow > 0){
-                   Toast.makeText(getContext(), "Movie Deleted", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getContext(), "Movie Removed", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getContext(), "Movie has already been Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Movie has already been removed", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -131,7 +131,6 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         ListView listViewReviews = (ListView) rootView.findViewById(R.id.reviews_list);
         listViewReviews.setAdapter(mMoviesReviews);
 
-        movieView.execute(String.valueOf(mMovieSelected.getmID()));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -140,13 +139,15 @@ public class DetailFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        movieReview.execute(String.valueOf(mMovieSelected.getmID()));
+        if(isNetworkAvailable()) {
+            movieView.execute(String.valueOf(mMovieSelected.getmID()));
+            movieReview.execute(String.valueOf(mMovieSelected.getmID()));
+        }
 
-        return rootView;}
         else{
             Toast.makeText(getContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
-            return null;
         }
+        return rootView;
     }
 
     public class FetchTrailers extends AsyncTask<String, Void, ArrayList<String>>{

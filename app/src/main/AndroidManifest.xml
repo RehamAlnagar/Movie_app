@@ -22,7 +22,6 @@
         <activity
             android:name=".DetailActivity"
             android:label="Movie details"
-            android:parentActivityName=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
 
             <meta-data

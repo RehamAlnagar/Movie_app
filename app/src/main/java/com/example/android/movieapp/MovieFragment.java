@@ -36,7 +36,7 @@ public class MovieFragment extends Fragment {
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> arrayData = new ArrayList<Movie>();
     private Context context = getContext();
-    private DBHandler dbFavourite ;//= new DBHandler(context);
+    private DBHandler dbFavourite ; //= new DBHandler(context);
     private GridView gridView;
     private NameListener mListener;
     // public ProgressDialog dialog;
@@ -114,16 +114,12 @@ public class MovieFragment extends Fragment {
         mMoviesDetails =
                 new customAdapter(getContext(), new ArrayList<Movie>());
         FetchMainMovie MovieView = new FetchMainMovie(mMoviesDetails);
-
-        if(isNetworkAvailable()) {
+        dbFavourite = new DBHandler(getContext());
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
         gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
-        dbFavourite = new DBHandler(rootView.getContext());
-
-        MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             private Context applicationContext;
@@ -139,11 +135,15 @@ public class MovieFragment extends Fragment {
             }
         });
 
-        return rootView;}
+        if(isNetworkAvailable()) {
+
+            MovieView.execute("top_rated");}
         else{
             Toast.makeText(getContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
-            return null;
+            //return null;
         }
+        return rootView;
+
     }
 
 
