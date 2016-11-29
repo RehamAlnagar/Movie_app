@@ -54,9 +54,7 @@ import java.util.ArrayList;
 
             view = layoutInflater.inflate(R.layout.item_list_movie, null);
         }
-       // TextView Moviename = (TextView) view.findViewById(R.id.movie_name);
         ImageView Movieposter = (ImageView) view.findViewById(R.id.movie_poster);
-       // Moviename.setText(mMoviesDetail.get(position).getMoviename());
 
         Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/"+ mMoviesDetail.get(position).getMovieposter()).into(Movieposter);
         return view;

@@ -10,12 +10,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,11 +61,30 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
     }
 
+    public static void updateListview(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, AbsListView.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-       // ((DetailActivity)getActivity()).getSupportActionBar().hide();
 
         if (container == null) {
             return null;
@@ -128,8 +150,20 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.trailers_list);
         listView.setAdapter(mMoviestrailers);
 
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+        updateListview(listView);
+
+
         ListView listViewReviews = (ListView) rootView.findViewById(R.id.reviews_list);
         listViewReviews.setAdapter(mMoviesReviews);
+
+        updateListview(listViewReviews);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -169,7 +203,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
             String MovieJsonStr = null;
             final String Movie_BASE_URL ="https://api.themoviedb.org/3/movie/";
             try {
-                URL url = new URL(Movie_BASE_URL + params[0] + "/videos?api_key=3d03f6c2413726779fb4dcd3135aa7bb&language=en-US");
+                URL url = new URL(Movie_BASE_URL + params[0] + "/videos?api_key=&language=en-US"); //add api key
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -258,7 +292,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
             String MovieJsonStr = null;
             final String Movie_BASE_URL ="https://api.themoviedb.org/3/movie/";
             try {
-                URL url = new URL(Movie_BASE_URL + params[0] + "/reviews?api_key=3d03f6c2413726779fb4dcd3135aa7bb&language=en-US");
+                URL url = new URL(Movie_BASE_URL + params[0] + "/reviews?api_key=&language=en-US"); //add api key
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -288,7 +322,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
                     String author = jsonObject.getString("author");
                     String content = jsonObject.getString("content");
 
-                    moviedata = "Author: " + author +"\n"+"Content: "+ content +"\n\n";
+                    moviedata = "=> Author: " + author +"\n"+"Content: "+ content +"\n\n";
                     arrayReviews.add(moviedata);
                 }
 

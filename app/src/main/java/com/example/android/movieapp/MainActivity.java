@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements NameListener {
-    // private Context context;
+
     boolean mInTwoPane = false;
 
 
@@ -16,13 +16,11 @@ public class MainActivity extends AppCompatActivity implements NameListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // inflate the main activity
         MovieFragment mMovieFragment = new MovieFragment();
         mMovieFragment.setNameListener(this);
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.frame1, mMovieFragment).commit();
         }
-        //check if two pane
         if (null != findViewById(R.id.frame_details)) {
             mInTwoPane = true;
         }
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements NameListener {
 
    @Override
     public void setSelectedName(Movie moviedetail) {
-        //Case one pane
         if (!mInTwoPane) {
 
             Intent intent = new Intent(this, DetailActivity.class);
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NameListener {
             intent.putExtras(bundle);
             startActivity(intent);
         } else {
-            //Case two pane
             DetailFragment mDetailFragment = new DetailFragment();
             Bundle bundle = new Bundle();
             bundle.putInt("ID",moviedetail.getmID());

@@ -74,7 +74,6 @@ public class DBHandler extends SQLiteOpenHelper{
     public Integer deleteMovies(String id){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_MOVIES, "id = ?" ,new String[]{id});
-        //db.execSQL(" DELETE FROM " + TABLE_MOVIES + " WHERE " + COL_ID + " =\" " + id + " \";");
 
     }
 }

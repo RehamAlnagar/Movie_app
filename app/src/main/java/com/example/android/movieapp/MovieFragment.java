@@ -36,10 +36,9 @@ public class MovieFragment extends Fragment {
     protected customAdapter mMoviesDetails;
     protected ArrayList<Movie> arrayData = new ArrayList<Movie>();
     private Context context = getContext();
-    private DBHandler dbFavourite ; //= new DBHandler(context);
+    private DBHandler dbFavourite ;
     private GridView gridView;
     private NameListener mListener;
-    // public ProgressDialog dialog;
 
     public void setNameListener(NameListener mListener) {
         this.mListener = mListener;
@@ -140,7 +139,6 @@ public class MovieFragment extends Fragment {
             MovieView.execute("top_rated");}
         else{
             Toast.makeText(getContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
-            //return null;
         }
         return rootView;
 
@@ -175,7 +173,7 @@ public class MovieFragment extends Fragment {
             final String Movie_BASE_URL = "https://api.themoviedb.org/3/movie/";
 
             try {
-                URL url = new URL(Movie_BASE_URL + params[0] + "?api_key=3d03f6c2413726779fb4dcd3135aa7bb");
+                URL url = new URL(Movie_BASE_URL + params[0] + "?api_key=");
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
