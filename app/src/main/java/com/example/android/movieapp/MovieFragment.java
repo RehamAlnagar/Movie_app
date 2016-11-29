@@ -3,6 +3,8 @@ package com.example.android.movieapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -111,14 +113,16 @@ public class MovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         mMoviesDetails =
                 new customAdapter(getContext(), new ArrayList<Movie>());
-        FetchMainMovie MovieView = new FetchMainMovie(mMoviesDetails) ;
+        FetchMainMovie MovieView = new FetchMainMovie(mMoviesDetails);
 
+        if(isNetworkAvailable()) {
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
         gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMoviesDetails);
 
         dbFavourite = new DBHandler(rootView.getContext());
+
         MovieView.execute("top_rated");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -135,7 +139,11 @@ public class MovieFragment extends Fragment {
             }
         });
 
-        return rootView;
+        return rootView;}
+        else{
+            Toast.makeText(getContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
 
@@ -217,9 +225,6 @@ public class MovieFragment extends Fragment {
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error " + e.toString());
-                // If the code didn't successfully get the weather data, there's no point in attemping
-
-                // to parse it.
                 return null;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -251,6 +256,14 @@ public class MovieFragment extends Fragment {
             mMoviesDetails.notifyDataSetChanged();
 
         }
+
     }
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager)getActivity().getSystemService(context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
 
 }

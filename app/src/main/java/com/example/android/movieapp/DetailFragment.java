@@ -3,6 +3,8 @@ package com.example.android.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -38,10 +41,17 @@ public class DetailFragment extends android.support.v4.app.Fragment {
     private Context mContext;
     Movie mMovieSelected = new Movie();
     DBHandler dbHandler;
-    protected ArrayAdapter mMoviestrailers;
+    protected TrailerAdapter mMoviestrailers;
     protected ArrayAdapter mMoviesReviews;
     protected ArrayList<String> arrayTrailers = new ArrayList<String>();
     protected ArrayList<String> arrayReviews = new ArrayList<String>();
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager)getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 
     public DetailFragment() {
@@ -51,26 +61,29 @@ public class DetailFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+       // ((DetailActivity)getActivity()).getSupportActionBar().hide();
+
         if (container == null) {
             return null;
         }
 
-        mMoviestrailers = new ArrayAdapter(getContext()
-                ,R.layout.list_item_trailers,R.id.list_item_trailer,new ArrayList());
+        mMoviestrailers = new TrailerAdapter(getContext(),new ArrayList<String>());
         FetchTrailers movieView = new FetchTrailers(mMoviestrailers);
 
         mMoviesReviews = new ArrayAdapter(getContext(),R.layout.list_item_review,R.id.reviews_item,new ArrayList());
         FetchReviews movieReview = new FetchReviews(mMoviesReviews);
 
         dbHandler = new DBHandler(getContext());
-
+        if(isNetworkAvailable()) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         TextView Title = (TextView) rootView.findViewById(R.id.detail_Title);
         ImageView Poster = (ImageView) rootView.findViewById(R.id.detail_poster);
         TextView date = (TextView) rootView.findViewById(R.id.moviedate);
         TextView rate = (TextView) rootView.findViewById(R.id.movierate);
         TextView overview = (TextView) rootView.findViewById(R.id.overview);
-        Button btn = (Button) rootView.findViewById(R.id.add_favbtn);
+        Button favbtn = (Button) rootView.findViewById(R.id.add_favbtn);
+        Button delbtn = (Button) rootView.findViewById(R.id.delete_btn);
 
         Bundle bundle = getArguments();
 
@@ -94,9 +107,21 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         mMovieSelected.setmVoteAverage(MovieVoteAvg);
         mMovieSelected.setmOverview(MovieOverview);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        favbtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dbHandler.addMovies(mMovieSelected);
+            }
+        });
+        delbtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Integer deletedRow = dbHandler.deleteMovies(String.valueOf(mMovieSelected.getmID()));
+                if(deletedRow > 0){
+                   Toast.makeText(getContext(), "Movie Deleted", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getContext(), "Movie has already been Deleted", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -117,14 +142,18 @@ public class DetailFragment extends android.support.v4.app.Fragment {
 
         movieReview.execute(String.valueOf(mMovieSelected.getmID()));
 
-        return rootView;
+        return rootView;}
+        else{
+            Toast.makeText(getContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
     public class FetchTrailers extends AsyncTask<String, Void, ArrayList<String>>{
         private final String LOG_TAG = FetchTrailers.class.getSimpleName();
 
-        public FetchTrailers(ArrayAdapter<String> arrayAdapter){
-            mMoviestrailers = arrayAdapter;
+        public FetchTrailers(TrailerAdapter Adapter){
+            mMoviestrailers = Adapter;
         }
 
         @Override
@@ -198,14 +227,14 @@ public class DetailFragment extends android.support.v4.app.Fragment {
             }
             return arrayTrailers;
         }
+
         @Override
         protected void onPostExecute(ArrayList<String> result) {
+            super.onPostExecute(result);
             if (result != null) {
-                mMoviestrailers.clear();
-                for (String movieStr : result) {
-                    mMoviestrailers.add(movieStr);
-                }
+                mMoviestrailers.add(result);
             }
+            mMoviestrailers.notifyDataSetChanged();
         }
     }
 
@@ -286,12 +315,15 @@ public class DetailFragment extends android.support.v4.app.Fragment {
         }
         @Override
         protected void onPostExecute(ArrayList<String> result) {
+            super.onPostExecute(result);
             if (result != null) {
                 mMoviesReviews.clear();
                 for (String movieStr : result) {
                     mMoviesReviews.add(movieStr);
                 }
             }
+            mMoviesReviews.notifyDataSetChanged();
+
         }
     }
 

@@ -67,13 +67,14 @@ public class DBHandler extends SQLiteOpenHelper{
 
     public Cursor getAllData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor result = db.rawQuery("select from "+TABLE_MOVIES,null);
+        Cursor result = db.rawQuery("select * from "+TABLE_MOVIES,null);
         return result;
     }
 
-    /*public void deleteMovies(int id){
+    public Integer deleteMovies(String id){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(" DELETE FROM " + TABLE_MOVIES + " WHERE " + COL_ID + " =\" " + id + " \";");
+        return db.delete(TABLE_MOVIES, "id = ?" ,new String[]{id});
+        //db.execSQL(" DELETE FROM " + TABLE_MOVIES + " WHERE " + COL_ID + " =\" " + id + " \";");
 
-    }*/
+    }
 }

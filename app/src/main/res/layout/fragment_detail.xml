@@ -21,8 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#006064"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:textAlignment="center"
                 android:textColor="#FFFF"
                 android:textSize="30sp"
@@ -67,17 +67,18 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/add_favbtn"
-                            android:text="Add to favourite" />
+                            android:text="Add to favorite"/>
+
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/delete_btn"
-                            android:text="delete from favourite" />
+                            android:text="delete from favorite"/>
                     </LinearLayout>
 
 
@@ -93,10 +94,7 @@
                 android:paddingRight="15dp"
                 android:paddingTop="25dp"
                 android:textSize="17sp" />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#000"/>
+
 
         </LinearLayout>
 
@@ -107,15 +105,10 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trailers:"
-            android:textSize="15sp"
-            android:textStyle="italic"
-            android:paddingTop="10dp"
-            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000"/>
 
         <ListView
             android:layout_width="match_parent"
@@ -129,12 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reviews:"
-            android:textSize="15sp"
-            android:textStyle="italic"/>
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
